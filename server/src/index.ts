@@ -1,6 +1,8 @@
 import express from "express";
 import dotenv from "dotenv";
-import * as db from "./db/connect.js"
+import * as db from "./models/connect"
+import FilmRouter from "./routes/filmRouter"
+import AuthRouter from "./routes/authRouter"
 dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -15,7 +17,11 @@ db.connectDB()
 app.get('/', (req, res) => {
   res.send('Hello World!')
 })
-
+const arrRoute = [
+  {path:'film',isApi:true,routes:FilmRouter},
+  {path:'auth',isApi:false,routes:AuthRouter}
+]
+arrRoute.map(r => app.use((r.isApi === true ? `/api/${r.path}`: `/${r.path}`),r.routes))
 app.listen(PORT, () => {
   console.log(`Server is running on PORT ${PORT}`);
 });
