@@ -1,13 +1,13 @@
 'use client'
 
 import Header from "./header"
-
-const Layout = ({props}) => {
-    return <>
+const Layout = ({ props }) => {
+    return <div className="film-container w-full h-full flex flex-wrap content-start">
         <Header />
-        <main>
+        <main className="w-full h-auto pt-10 overflow-x-hidden">
             {props.children}
         </main>
-    </>
+    </div>
+
 }
 export default Layout

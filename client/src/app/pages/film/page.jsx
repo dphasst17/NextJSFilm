@@ -1,4 +1,9 @@
+import FilmContent from ".";
+
+export const metadata = {
+    title: "Film",
+};
 const Film = () => {
-    return <h1>View All Film page</h1>
+    return <FilmContent />
 }
 export default Film

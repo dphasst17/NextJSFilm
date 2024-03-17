@@ -17,6 +17,11 @@
 }
 
 body {
+  width: 99vw;
+  height: auto;
+  min-height: 100vh;
+  overflow-x: hidden;
+  margin:0 auto;
   color: rgb(var(--foreground-rgb));
   background: linear-gradient(
       to bottom,
@@ -30,4 +35,76 @@ body {
   .text-balance {
     text-wrap: balance;
   }
+}
+@keyframes transNavBar {
+  0%{
+    transform: translateY(-150%);
+  }
+  100%{
+    transform: translateY(1%);
+  }
+}
+@keyframes transNavBarReverse {
+  0%{
+    transform: translateY(1%);
+  }
+  100%{
+    transform: translateY(-150%);
+  }
+}
+@keyframes showItems{
+  0%{
+    opacity: 0;
+    transform: translateY(-200%);
+  }
+  100%{
+    opacity: 1;
+    transform: translateY(0%);
+  }
+}
+@keyframes OpacityAnimate{
+  0%{
+    opacity: 0;
+    transform: scale(0);
+  }
+  100%{
+    opacity: 01;
+    transform: scale(1);
+  }
+}
+.animateShowItems{
+  animation: showItems .3s linear forwards;
+}
+.animateOpacity{
+  opacity: 0;
+  animation: OpacityAnimate .2s linear forwards;
+}
+.animateNavBar{
+  transform: translateY(-150%);
+  animation: transNavBar .2s linear forwards;
+}
+.animateNavBarReverse{
+  transform: translateY(1%);
+  animation: transNavBarReverse .2s linear forwards;
+}
+.animate-delay-0{
+  animation-delay: 0s;
+}
+.animate-delay-0-1{
+  animation-delay: .1s;
+}
+.animate-delay-0-2{
+  animation-delay: .2s;
+}
+.animate-delay-0-3{
+  animation-delay: .3s;
+}
+.animate-delay-0-4{
+  animation-delay: .4s;
+}
+.item:hover img {
+  transform: scale(1.2);
+}
+.item:hover .info{
+  bottom: 0;
 }
