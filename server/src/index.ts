@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 import * as db from "./models/connect"
 import FilmRouter from "./routes/filmRouter"
 import AuthRouter from "./routes/authRouter"
+import { handleSendMail, uiTicket } from "./utils/mail";
 dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -17,6 +18,19 @@ db.connectDB()
 app.get('/', (req, res) => {
   res.send('Hello World!')
 })
+/* app.get('/test',(req,res) => {
+  const data = {
+    toMail:'phathuu12@gmail.com',
+    subject:'FILM TICKET',
+    id:'JJK2',//idFilm
+    title:'JUJUTSU KAISEN SEASON 2',//title film
+    name:'Phat',//nameUser
+    date:'17/05/2024',
+    frame:7,
+    count:1
+  }
+  handleSendMail(res,data,'qr')
+}) */
 const arrRoute = [
   {path:'film',isApi:true,routes:FilmRouter},
   {path:'auth',isApi:false,routes:AuthRouter}
@@ -25,3 +39,4 @@ arrRoute.map(r => app.use((r.isApi === true ? `/api/${r.path}`: `/${r.path}`),r.
 app.listen(PORT, () => {
   console.log(`Server is running on PORT ${PORT}`);
 });
+

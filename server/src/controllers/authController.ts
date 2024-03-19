@@ -16,6 +16,7 @@ interface RequestCustom extends Request{
 }
 const database = client.db("FilmDB");
 const collection = database.collection("auth");
+const collectionInfo = database.collection("info")
 export default class Auth {
     private createToken = (idUser:string) => {
         const accessToken = jwt.sign({ id: idUser }, process.env.SECRET_KEY as string, { expiresIn: "600s", });
@@ -23,6 +24,11 @@ export default class Auth {
         const { exp: expAccess } = jwt.decode(accessToken) as JwtPayloadCustom;
         const { exp: expRefresh } = jwt.decode(refreshToken) as JwtPayloadCustom;
         return { accessToken, refreshToken, expAccess, expRefresh }
+    }
+    private createAToken = (idUser:string) => {
+        const accessToken = jwt.sign({ id: idUser }, process.env.SECRET_KEY as string, { expiresIn: "600s", });
+        const { exp: expAccess } = jwt.decode(accessToken) as JwtPayloadCustom;
+        return {accessToken,expAccess}
     }
     //hash_pass
     private encodePass = (password:string) => {
@@ -46,45 +52,64 @@ export default class Auth {
     }
     public login = (req:Request,res:Response) => {
         const data = req.body;
-        collection.find({username:data.username}).toArray()
+        const resultData:AuthReq = {
+            username:data.username,
+            password:data.password
+        }
+        collection.find({username:resultData.username}).toArray()
         .then(results => {
             if(results.length === 0){
                 NewResponse.responseMessage(res,401,"Username doesn't exit")
                 return
             }
             const pass_hash = results.map(e => e.password).toString()
-            const isPassword = bcrypt.compareSync(data.password, pass_hash);
+            const isPassword = bcrypt.compareSync(resultData.password, pass_hash);
             if (!isPassword) {
                 NewResponse.responseMessage(res,401,"Incorrect password")
                 return
             }
             const idUser = results.map(e => e.idUser).toString()
             const token = this.createToken(idUser)
-            NewResponse.responseData(res,200,{...token,role:results.map(e => e.role)[0]})
+            return NewResponse.responseData(res,200,{...token,role:results.map(e => e.role)[0]})
         })
         .catch(err => {
-            console.log(err)
             NewResponse.responseMessage(res,500,'A server error occurred. Please try again in 5 minutes.')
         })
     }
-    public register = (req:Request,res:Response) => {
+    public register = async(req:Request,res:Response) => {
         const data = req.body
         const pass_hash = this.encodePass(data.password)
-        collection.find({username:data.username}).toArray()
-        .then(resFind => {
-            if(resFind.length !== 0){
+        try{
+            const [auth,info] = await Promise.all([
+                collection.find({username:data.username}).toArray(),
+                collectionInfo.find({email:data.email}).toArray()
+            ])
+            if(auth.length !== 0 ){
                 NewResponse.responseMessage(res,401,'Username is already taken')
                 return
             }
-            collection.insertOne({idUser:data.username,username:data.username,password:pass_hash,role:data.role ? data.role : 2})
-            .then(results => {
-                NewResponse.responseMessage(res,201,NewMessage.createItemsMessage('account'))
-            })
-        })
-        .catch(err => NewResponse.responseMessage(res,500,'A server error occurred. Please try again in 5 minutes.'))
+            if(info.length !== 0){
+                NewResponse.responseMessage(res,401,'Email is already taken')
+                return
+            }
+            await collection.insertOne({idUser:data.username,username:data.username,password:pass_hash,role:data.role ? data.role : 2})
+            collectionInfo.insertOne({idUser:data.username,email:data.email,name:"",phone:"",point:0}).then(infoRes => NewResponse.responseMessage(res,201,NewMessage.createItemsMessage('account')))
+        }
+        catch(error){
+            NewResponse.responseMessage(res,500,'A server error occurred. Please try again in 5 minutes.')
+        }
     }
 
     public createNewToken = (req:RequestCustom,res:Response) => {
         const idUser = req.idUser
+        collection.find({idUser:idUser}).toArray()
+        .then(authRes => {
+            if(authRes.length === 0){
+                NewResponse.responseMessage(res,401,"User doesn't exit")
+                return
+            }
+            const token = this.createAToken(idUser)
+            NewResponse.responseData(res,200,token)
+        })
     }
 }

@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { client } from "../models/connect";
 import * as NewResponse from "../utils/response";
 import * as NewMessage from "../utils/message";
+import { handleSendMail } from "../utils/mail";
 interface Film {
   id:string;
   title: string;
@@ -23,7 +24,8 @@ interface TicketDetail{
   date:string;
   count:number;
   idFilm:string;
-  orderId:string
+  orderId:string;
+  isConfirm:boolean
 }
 const database = client.db("FilmDB");
 const collection = database.collection("film");
@@ -99,23 +101,39 @@ export default class FilmController{
       email:data.info.email,
       timeFrame:data.timeFrame,
       date:data.date,
-      count:data.info.count,
+      count:data.count,
       idFilm:data.idFilm,
-      orderId:data.orderId
+      orderId:data.orderId,
+      isConfirm:false
     }
     collectionTicket.insertOne(getData)
     .then(result => {
       if(result.acknowledged && result.insertedId){
-        NewResponse.responseDataMessage(
-          res,
-          201,
-          [{ _id:result.insertedId }],
-          "Buy ticket is success"
-        );
+        collection.find({id: data.idFilm}).project({title:1,background:1,_id:0}).toArray()
+        .then(findData => {
+          const infoTicket = {
+            toMail:data.info.email,
+            subject:'FILM TICKET',
+            title:findData[0].title,
+            name:data.info.name,
+            frame:data.timeFrame,
+            date:data.date,
+            count:data.count,
+            id:data.idFilm,
+            background:findData[0].background
+          }
+          handleSendMail(res,infoTicket,'qr')
+        })
       }else{
         NewResponse.responseMessage(res, 422, "Create ticket is failure");
       }
     })
     .catch(err => NewResponse.responseMessage(res,500,'A server error occurred. Please try again in 5 minutes.'))
+  }
+  public confirmTicket = (req:Request,res:Response) => {
+    const data = req.body
+    const splitData = data.split("-")
+    const idFilm = splitData[0]
+    const idUser = splitData[1]
   }
 }
