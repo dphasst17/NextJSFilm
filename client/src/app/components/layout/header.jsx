@@ -3,13 +3,15 @@ import { StateContext } from "@/app/context/stateContext";
 import { usePathname, useRouter } from "next/navigation";
 import { use, useEffect, useState } from "react";
 import { FiChevronRight } from "react-icons/fi";
-import { Input, Button } from "@nextui-org/react";
-import { FaSearch } from "react-icons/fa";
+import { Input, useDisclosure,Button} from "@nextui-org/react";
 import { CiSearch } from "react-icons/ci";
+import ModalScan from "./modalQr";
 const Header = () => {
     const [isNav, setIsNav] = useState(true)
-    const { isLog, setIsLog } = use(StateContext);
-    const [searchValue, setSearchValue] = useState("")
+    const { isLog, isUser, setIsLog } = use(StateContext);
+    const [searchValue, setSearchValue] = useState("");
+    const [isModal,setIsModal] = useState(false);
+    const {isOpen, onOpen, onOpenChange} = useDisclosure();
     const param = usePathname()
     const router = useRouter()
     const arrNav = [
@@ -39,26 +41,12 @@ const Header = () => {
                 onClick={() => { router.push(a.url) }} key={a.id}>
                 {a.title.toLocaleUpperCase()}
             </div>)}
-            {isLog &&
-                <>
-                    <div onClick={() => { router.push('/admin') }} className={`navDetail flex items-center justify-center mx-2 w-[100px] ${isNav ? 'animateNavBar' : 'animateNavBarReverse'} ${param === '/admin' ? 'bg-zinc-700 font-sc-thin' : ' border-zinc-300'} my-2  border border-solid animate-delay-0-3  hover:bg-zinc-700 cursor-pointer rounded-md transition-all`} >
-                        MANAGE
-                    </div>
-                </>
+            {isLog && !isUser &&
+                <div onClick={() => { router.push('/admin') }} className={`navDetail flex items-center justify-center mx-2 w-[100px] ${isNav ? 'animateNavBar' : 'animateNavBarReverse'} ${param === '/admin' ? 'bg-zinc-700 font-sc-thin' : ' border-zinc-300'} my-2  border border-solid animate-delay-0-3  hover:bg-zinc-700 cursor-pointer rounded-md transition-all`} >
+                    MANAGE
+                </div>
             }
-            <div className={`navDetail flex items-center justify-center border border-solid border-zinc-300 hover:bg-zinc-700 mx-2 w-[100px] ${isNav ? 'animateNavBar' : 'animateNavBarReverse'} my-2 animate-delay-0-4 cursor-pointer rounded-md transition-all`}
-                onClick={() => { 
-                    if(isLog){
-                        setIsLog(false); localStorage.clear(); router.push('/auth')
-                    }else{
-                        router.push('/auth')
-                    }
-                 }}>
-                {isLog ? 'LOGOUT':'LOGIN'}
-            </div>
-            <div onClick={() => { setIsLog(true); localStorage.setItem('adminLog', JSON.stringify(true)) }} className={`navDetail flex items-center justify-center mx-2 w-[100px] ${isNav ? 'animateNavBar' : 'animateNavBarReverse'} ${param === '/admin' ? 'bg-zinc-700 font-sc-thin' : ' border-zinc-300'} my-2  border border-solid animate-delay-0-3  hover:bg-zinc-700 cursor-pointer rounded-md transition-all`} >
-                set login
-            </div>
+
         </nav>
         <div className="search w-1/5 flex items-center">
             <Input
@@ -76,6 +64,29 @@ const Header = () => {
                 }
             />
         </div>
+        <nav className="navInfo w-[35%] flex flex-row-reverse">
+            
+            <div className={`navDetail h-[35px] flex items-center justify-center border border-solid border-zinc-300 hover:bg-zinc-700 mx-2 w-[100px] ${isNav ? 'animateNavBar' : 'animateNavBarReverse'} my-2 animate-delay-0-4 cursor-pointer rounded-md transition-all`}
+                onClick={() => {
+                    if (isLog) {
+                        setIsLog(false); localStorage.clear(); router.push('/auth')
+                    } else {
+                        router.push('/auth')
+                    }
+                }}>
+                {isLog ? 'LOGOUT' : 'LOGIN'}
+            </div>
+            <div onClick={() => { setIsLog(true); localStorage.setItem('adminLog', JSON.stringify(true)) }} className={`navDetail flex items-center justify-center mx-2 w-[100px] ${isNav ? 'animateNavBar' : 'animateNavBarReverse'} ${param === '/admin' ? 'bg-zinc-700 font-sc-thin' : ' border-zinc-300'} my-2  border border-solid animate-delay-0-3  hover:bg-zinc-700 cursor-pointer rounded-md transition-all`} >
+                set login
+            </div>
+            {isLog && !isUser &&
+                <Button onPress={onOpen}  className={`navDetail flex items-center justify-center mx-2 w-[100px] ${isNav ? 'animateNavBar' : 'animateNavBarReverse'}  border-zinc-300 my-2  border border-solid animate-delay-0-3  hover:bg-zinc-700 cursor-pointer rounded-md transition-all`} >
+                    SCAN QR
+                </Button>
+            }
+
+        </nav>
+        <ModalScan props={{isOpen,onOpenChange}}/>
     </header>
 }
 export default Header;

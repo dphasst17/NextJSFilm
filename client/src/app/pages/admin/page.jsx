@@ -8,6 +8,8 @@ import {useDisclosure} from "@nextui-org/react";
 import ModalAddNew from "./modal/add"
 import { StateContext } from "@/app/context/stateContext"
 import ModalEditFilm from "./modal/edit"
+import ModalViewUser from "./modal/viewUserStaff"
+import ModalAddStaff from "./modal/addStaff"
 const Admin = () => {
     const {isLog} = use(StateContext)
     const [nameModal,setNameModal] = useState("");
@@ -23,6 +25,8 @@ const Admin = () => {
     <AdminFilm props={{setNameModal,onOpen,setIdEdit}}/>
     {nameModal === "add" && <ModalAddNew props={{isOpen,onOpenChange}}/>}
     {nameModal === "edit" && <ModalEditFilm props={{isOpen,onOpenChange,idEdit}}/>}
+    {nameModal === "user" && <ModalViewUser props={{isOpen,onOpenChange,idEdit}}/>}
+    {nameModal === "addUser" && <ModalAddStaff props={{isOpen,onOpenChange,idEdit}}/>}
 </section>
 }
 export default Admin
