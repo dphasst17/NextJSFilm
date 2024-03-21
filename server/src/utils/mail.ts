@@ -41,7 +41,7 @@ export const handleSendMail = (res: any, data: any,type:string) => {
     refresh_token: GOOGLE_MAILER_REFRESH_TOKEN,
   });
   const sendMail = async () => {
-    let qr = type === 'qr' ? await QRCode.toDataURL(`${data.id}-${data.name}`) : '';
+    let qr = type === 'qr' ? await QRCode.toDataURL(`${data.id}`) : '';
     try {
       // Lấy thông tin gửi lên từ client qua body
       const myAccessTokenObject = await myOAuth2Client.getAccessToken();

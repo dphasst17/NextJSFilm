@@ -11,7 +11,7 @@ interface AuthReq {
 interface JwtPayloadCustom extends jwt.JwtPayload  {
     exp:number
 }
-interface RequestCustom extends Request{
+export interface RequestCustom extends Request{
     idUser:string
 }
 const database = client.db("FilmDB");
@@ -72,9 +72,7 @@ export default class Auth {
             const token = this.createToken(idUser)
             return NewResponse.responseData(res,200,{...token,role:results.map(e => e.role)[0]})
         })
-        .catch(err => {
-            NewResponse.responseMessage(res,500,'A server error occurred. Please try again in 5 minutes.')
-        })
+        .catch(err => NewResponse.responseMessage(res,500,'A server error occurred. Please try again in 5 minutes.'))
     }
     public register = async(req:Request,res:Response) => {
         const data = req.body
@@ -102,7 +100,7 @@ export default class Auth {
 
     public createNewToken = (req:RequestCustom,res:Response) => {
         const idUser = req.idUser
-        collection.find({idUser:idUser}).toArray()
+        collection.find({idUser:idUser.split('-')[0]}).toArray()
         .then(authRes => {
             if(authRes.length === 0){
                 NewResponse.responseMessage(res,401,"User doesn't exit")
