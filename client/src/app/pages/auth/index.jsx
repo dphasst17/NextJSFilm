@@ -1,8 +1,5 @@
 'use client'
 import React, { use, useState } from "react";
-import {Input,Button} from "@nextui-org/react";
-import {EyeFilledIcon} from "@/app/components/Icon/EyeFilledIcon";
-import {EyeSlashFilledIcon} from "@/app/components/Icon/EyeSlashFilledIcon";
 import { useForm } from "react-hook-form";
 import { Login } from "@/app/api/apiAuth";
 import { setCookie } from "cookies-next";

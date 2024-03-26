@@ -29,7 +29,7 @@ const IndexUser = () => {
     const { user } = use(StateContext);
     const [modalName,setModalName] = useState("");
     const {isOpen, onOpen, onOpenChange} = useDisclosure();
-    const isLogin = JSON.parse(localStorage.getItem('isLog') || false)
+    const isLogin = JSON.parse(window.localStorage.getItem('isLog') || false)
     useEffect(() => {
         !isLogin && router.push('/auth')
     }, [])

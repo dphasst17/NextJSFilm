@@ -50,11 +50,6 @@ const Seat = ({ props }) => {
               onClick={() => { !seatData?.includes(`${c.toLocaleUpperCase()}${r}`) && props.setSeat(`${c}${r}`) }}>
               {c.toLocaleUpperCase()}{r}
             </Button>
-            /* seatData?.length !== 0 ? seatData?.map(s => <Button color={props.seat === `${c}${r}` ? 'primary' : (s === `${c.toLocaleUpperCase()}${r}` ? 'success':'default')} radius="sm" className='text-white' onClick={() => { s !== `${c.toLocaleUpperCase()}${r}` && props.setSeat(`${c}${r}`) }}>
-            {c.toLocaleUpperCase()}{r}
-          </Button>) : <Button color={props.seat === `${c}${r}` ? 'primary' : 'default'} radius="sm" className='text-white' onClick={() => { props.setSeat(`${c.toLocaleUpperCase()}${r}`) }}>
-            {c.toLocaleUpperCase()}{r}
-          </Button> */
           )}
         </div>)}
     </div>

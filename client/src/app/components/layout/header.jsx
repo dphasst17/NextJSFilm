@@ -1,7 +1,7 @@
 'use client'
 import { StateContext } from "@/app/context/stateContext";
 import { usePathname, useRouter } from "next/navigation";
-import { use, useEffect, useState } from "react";
+import { use, useState } from "react";
 import { FiChevronRight } from "react-icons/fi";
 import { Input, useDisclosure,Button} from "@nextui-org/react";
 import { CiSearch } from "react-icons/ci";

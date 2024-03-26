@@ -23,7 +23,7 @@ const Detail = () => {
     const [isPaypal, setIsPaypal] = useState(false);
     const [stateForm, setStateForm] = useState({ info: { name: '', email: '', phone: '' }, timeFrame: 0, date: '', count: 1, idFilm: param?.id[0] })
     const { data: result, err } = useFetchDataByKey('film', 'fetchFilmDetail', param?.id[0])
-    const role = JSON.parse(localStorage.getItem('role') || 2)
+    const role = JSON.parse(window.localStorage.getItem('role') || 2)
     useEffect(() => {
         result !== null && setData(result.data)
         result !== null && setUrlBackground(result.data.map(e => e.background))

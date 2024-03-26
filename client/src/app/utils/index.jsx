@@ -11,7 +11,7 @@ export const pagination = (itemsInPage,dataLength) => {
     return dataLength % itemsInPage === 0 ? dataLength / itemsInPage : (dataLength / itemsInPage) + 1
 }
 export const setLocalStorage = (name,value) => {
-    return localStorage.setItem(`${name}`,JSON.stringify(value))
+    return window.localStorage.setItem(`${name}`,JSON.stringify(value))
 }
 export const getToken = () => {
     const get = useCallback(async() => {
@@ -25,7 +25,7 @@ export const getToken = () => {
             return res.data.accessToken
         }
         if(!access && !refresh){
-            localStorage.clear()
+            window.localStorage.clear()
             return false
         }
         if(access){
