@@ -24,7 +24,11 @@ export const uiTicket = (qr: string, data: any) => {
     </div>
   </div>`;
 };
-
+interface ResponseSendMail {
+  status:number,
+  message:string,
+  idTicket?:string
+}
 export const handleSendMail = (res: any, data: any,type:string) => {
   const toMail = data.toMail;
   const subject = data.subject;
@@ -66,9 +70,11 @@ export const handleSendMail = (res: any, data: any,type:string) => {
         html: type === 'qr' ? uiTicket(qr, data): ``,
       };
       await transport.sendMail(mailOptions);
+      let jsonResult:ResponseSendMail = {status: 200, message: "Email sent successfully."}
+      jsonResult = type === 'qr' ? {...jsonResult,idTicket: data.id} : jsonResult
       res
         .status(200)
-        .json({ status: 200, message: "Email sent successfully." });
+        .json(jsonResult);
     } catch (error: any) {
       console.log(error);
       res.status(500).json({ err: error.message });

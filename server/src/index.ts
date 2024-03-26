@@ -4,9 +4,17 @@ import * as db from "./models/connect"
 import FilmRouter from "./routes/filmRouter"
 import AuthRouter from "./routes/authRouter"
 import UserRouter from "./routes/userRouter"
-import { handleSendMail, uiTicket } from "./utils/mail";
+import { createServer } from "http";
+import { Server } from "socket.io";
 dotenv.config();
 const app = express();
+const server = createServer(app);
+const io = new Server(server,{
+  cors:{
+    origin:"*",
+    methods:["GET","POST"]
+  }
+});
 const PORT = process.env.PORT || 3001;
 app.use(express.json());
 app.use((req, res, next) => {
@@ -23,26 +31,14 @@ db.connectDB()
 app.get('/', (req, res) => {
   res.send('Hello World!')
 })
-/* app.get('/test',(req,res) => {
-  const data = {
-    toMail:'phathuu12@gmail.com',
-    subject:'FILM TICKET',
-    id:'JJK2',//idFilm
-    title:'JUJUTSU KAISEN SEASON 2',//title film
-    name:'Phat',//nameUser
-    date:'17/05/2024',
-    frame:7,
-    count:1
-  }
-  handleSendMail(res,data,'qr')
-}) */
+
 const arrRoute = [
-  {path:'film',isApi:true,routes:FilmRouter},
+  {path:'film',isApi:true,routes:FilmRouter(io)},
   {path:'auth',isApi:false,routes:AuthRouter},
   {path:'user',isApi:false,routes:UserRouter}
 ]
 arrRoute.map(r => app.use((r.isApi === true ? `/api/${r.path}`: `/${r.path}`),r.routes))
-app.listen(PORT, () => {
+server.listen(PORT, () => {
   console.log(`Server is running on PORT ${PORT}`);
 });
 
