@@ -1,5 +1,6 @@
-import { useEffect, useState } from "react";
+import { use, useEffect, useState } from "react";
 import * as ApiFilm from "../api/apiFilm"
+import { StateContext } from "../context/stateContext";
 const handleGetApi = (type,fName,key) => {
     let url;
     switch(type){
@@ -13,10 +14,13 @@ const handleGetApi = (type,fName,key) => {
 }
 export const useFetchData = (type,fName) => {
     const [data ,setData] = useState(null);
-    const [err,setErr] = useState(null)
+    const [err,setErr] = useState(null);
+    const {setIsLoading} = use(StateContext)
     let url = handleGetApi(type,fName)
     useEffect(() => {
+        setIsLoading(true)
         url().then(res => {
+            setIsLoading(false)
             if(res.status === 200 || res.status === 201){
                 setData(res)
                 return
@@ -44,6 +48,6 @@ export const useFetchDataByKey = (type,fName,key) => {
         .catch(err => {
             setErr(err)
         })
-      }, [type,fName,key]);
+      }, []);
     return {data,err};
 }

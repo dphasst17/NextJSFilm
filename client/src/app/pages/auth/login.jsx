@@ -9,9 +9,10 @@ import { setCookie } from "cookies-next";
 import { setLocalStorage } from "@/app/utils";
 import { useRouter } from "next/navigation";
 import { StateContext } from "@/app/context/stateContext";
+import { getUser } from "@/app/api/apiUser";
 const LoginForm = ({ props }) => {
     const router = useRouter();
-    const {setIsLog,setIsUser} = use(StateContext)
+    const {setIsLog,setIsUser,setUser} = use(StateContext)
     const {
         register,
         handleSubmit,
@@ -23,7 +24,7 @@ const LoginForm = ({ props }) => {
         Login(data).then(res => {
             res.status === 401 && alert(res.message)
             if(res.status===200){
-                setLocalStorage('adminLog',true)
+                setLocalStorage('isLog',true)
                 setLocalStorage('expA',res.data.expAccess)
                 setLocalStorage('expR',res.data.expRefresh)
                 setLocalStorage('role',res.data.role)
@@ -31,6 +32,15 @@ const LoginForm = ({ props }) => {
                 setCookie('refresh',res.data.refreshToken,{expires: new Date(res.data.expRefresh * 1000)})
                 setIsLog(true)
                 setIsUser(res.data.role === 2 ? true : false)
+                if(res.data.role !==0){
+                    getUser(res.data.accessToken)
+                    .then(resData => {
+                        if(resData.status === 200){
+                            console.log(resData.data)
+                            setUser(resData.data)
+                        }
+                    })
+                }
                 router.push('/')
             }
         })

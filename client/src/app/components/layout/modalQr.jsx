@@ -1,9 +1,20 @@
 'use client'
+import { confirmTicket } from "@/app/api/apiFilm";
 import { Modal, ModalHeader, ModalContent, ModalFooter, ModalBody,Button} from "@nextui-org/react"
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { QrReader } from 'react-qr-reader';
 const ModalScan = ({props}) => {
     const [data, setData] = useState('');
+    useEffect(() => {
+      if(data !== ''){
+        
+        confirmTicket(data)
+        .then(res => {
+          alert(res.message)
+          setData('')
+        })
+      }
+    },[data])
     return <Modal
     isOpen={props.isOpen}
     onOpenChange={props.onOpenChange}
@@ -32,7 +43,6 @@ const ModalScan = ({props}) => {
                 style={{height:'200px' }}
                 className="w-full"
             />
-            <p>{data}</p>
           </ModalBody>
           <ModalFooter>
             <Button >SCAN</Button>

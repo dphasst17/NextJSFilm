@@ -5,7 +5,7 @@ import { Modal, ModalHeader, ModalContent, ModalFooter, ModalBody, Input, Button
 import { use, useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
 const ModalAddNew = ({ props }) => {
-  const { timeFrame } = use(StateContext)
+  const { timeFrame,setFilm,film } = use(StateContext)
   const [time,setTime] = useState([])
   const { register, handleSubmit, formState: { errors }, } = useForm()
   const ColFilm = [
@@ -26,7 +26,14 @@ const ModalAddNew = ({ props }) => {
       return
     }
     console.log({...data,frame:time})
-    fetchCreateFilm({...data,title:data.title.toUpperCase(),frame:time}).then(res => {alert(res.message)})
+    fetchCreateFilm({...data,title:data.title.toUpperCase(),frame:time}).then(res => 
+      {
+        if(res.status === 201){
+          setFilm([{thumbnails:data.thumbnails,title:data.title,id:data.id},...film])
+        }
+        alert(res.message)
+      }
+    )
   }
   const handleCheckbox = (t) => {
     time.includes(t) ? setTime(time.filter(e => e !== t)) : setTime([...time,t])
