@@ -10,7 +10,7 @@ import { useForm } from "react-hook-form";
 import Payment from "./paypal";
 import Seat from "./seat";
 const Detail = () => {
-    const { arrKeyFilmDetail, user, isLog } = use(StateContext)
+    const { arrKeyFilmDetail, user, isLog,isUser } = use(StateContext)
     const param = useParams();
     const router = useRouter()
     const { register, handleSubmit, formState: { errors }, } = useForm();
@@ -23,7 +23,6 @@ const Detail = () => {
     const [isPaypal, setIsPaypal] = useState(false);
     const [stateForm, setStateForm] = useState({ info: { name: '', email: '', phone: '' }, timeFrame: 0, date: '', count: 1, idFilm: param?.id[0] })
     const { data: result, err } = useFetchDataByKey('film', 'fetchFilmDetail', param?.id[0])
-    const role = JSON.parse(window.localStorage.getItem('role') || 2)
     useEffect(() => {
         result !== null && setData(result.data)
         result !== null && setUrlBackground(result.data.map(e => e.background))
@@ -93,7 +92,7 @@ const Detail = () => {
                 ></iframe>
             </div>
 
-            {role !== 0 && <div className="frame w-full h-auto min-h-[400px] flex flex-wrap justify-center content-start">
+            { isUser && <div className="frame w-full h-auto min-h-[400px] flex flex-wrap justify-center content-start">
                 <h1 className="w-full text-center font-sc-thin font-extrabold text-[40px] text-red-600 my-4">Time frame</h1>
                 <ButtonGroup size="lg">{d.frame.map(t => <Button className="transition-all" onClick={() => { setTime(t) }} color={t === time ? 'primary' : 'default'} radius="sm">{t}:00 {t < 12 ? 'AM' : 'PM'}</Button>)}</ButtonGroup>
                 <h1 className="w-full text-center font-sc-thin font-extrabold text-[40px] text-red-600 my-4">Date</h1>

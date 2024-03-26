@@ -26,14 +26,13 @@ const Title = ({props}) => {
 }
 const IndexUser = () => {
     const router = useRouter()
-    const { user } = use(StateContext);
+    const { user,isLog } = use(StateContext);
     const [modalName,setModalName] = useState("");
     const {isOpen, onOpen, onOpenChange} = useDisclosure();
-    const isLogin = JSON.parse(window.localStorage.getItem('isLog') || false)
     useEffect(() => {
-        !isLogin && router.push('/auth')
+        !isLog && router.push('/auth')
     }, [])
-    return isLogin && <div className='user w-full h-auto min-h-screen flex flex-wrap justify-around content-start'>
+    return isLog && <div className='user w-full h-auto min-h-screen flex flex-wrap justify-around content-start'>
         <div className='point w-full h-[30px] my-4 px-2 flex items-center'>
             POINT:
             <Button className='h-[30px] flex items-center justify-center mx-2' radius='sm' color='default'>{user?.map(u => u.point)} </Button>
