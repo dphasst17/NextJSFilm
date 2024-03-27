@@ -3,6 +3,6 @@ export const metadata = {
   title: "Tech Film",
   description: "Tech Film",
 };
-export default function Index() {
+export default function Page() {
   return <Home />
 }

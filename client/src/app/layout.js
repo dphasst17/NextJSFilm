@@ -25,7 +25,9 @@ export default function RootLayout({ children }) {
       <body className={inter.className}>
         <StateProvider>
           <ApiProvider>
-            <Providers><Layout props={{ children }} /></Providers>
+            <Providers>
+              <Layout props={{ children }} />
+            </Providers>
           </ApiProvider>
         </StateProvider>
       </body>
