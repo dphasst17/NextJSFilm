@@ -19,6 +19,8 @@ export default function RootLayout({ children }) {
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link href="https://fonts.googleapis.com/css2?family=Alegreya+Sans+SC:ital,wght@1,900&family=Oswald:wght@500&display=swap" rel="stylesheet" />
+        <title>Tech Film</title>
+        <meta name="description" content="Tech Film - Here, you can easily book tickets for movies of all genres, from action to drama. With a simple and convenient booking process, get ready for an amazing entertainment experience with friends and family!" />
       </head>
       <body className={inter.className}>
         <StateProvider>
