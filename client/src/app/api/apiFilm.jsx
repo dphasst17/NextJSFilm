@@ -26,11 +26,12 @@ export const fetchBuyTicket = async(token,stateForm) => {
         body:JSON.stringify(stateForm)
     }).then(res => res.json())
 }
-export const fetchCreateFilm = async(data) => {
+export const fetchCreateFilm = async(token,data) => {
     return fetch(`${process.env.NEXT_PUBLIC_URL}/api/film/`,{
         method:'POST',
         headers:{
-            'Content-Type':'application/json'
+            'Content-Type':'application/json',
+            'Authorization':`Bearer ${token}`
         },
         body:JSON.stringify(data)
     }).then(res => res.json())
