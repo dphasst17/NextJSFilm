@@ -9,7 +9,6 @@ import { useRouter } from "next/navigation";
 import { StateContext } from "@/app/context/stateContext";
 const RegisterForm = ({ props }) => {
     const router = useRouter();
-    const {setIsLog,setIsUser} = use(StateContext)
     const {
         register,
         handleSubmit,
