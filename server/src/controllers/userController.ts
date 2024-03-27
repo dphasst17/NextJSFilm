@@ -4,7 +4,7 @@ import { RequestCustom } from "./authController";
 import * as NewResponse from "../utils/response";
 import * as NewMessage from "../utils/message";
 export default class User {
-  public getAll = async(req: RequestCustom, res: Response) => {
+  public getUser = async(req: RequestCustom, res: Response) => {
     const idUser = req.idUser;
     try{
         const [userData,ticketData] = await Promise.all([
@@ -60,4 +60,10 @@ export default class User {
       })
       .catch(err => NewResponse.responseMessage(res,500,'A server error occurred. Please try again in 5 minutes.'))
   };
+  public getAll = (req: Request, res: Response) => {
+    collectionInfo.find({action:'active'}).project({_id:0,idUser:1,action:1,dateCreated:1}).sort({dateCreated:-1}).toArray()
+    .then(result => {
+      NewResponse.responseData(res,200,result)
+    })
+  }
 }

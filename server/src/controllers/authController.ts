@@ -33,20 +33,6 @@ export default class Auth {
         const salt = bcrypt.genSaltSync(Number(saltRound));
         return bcrypt.hashSync(password, salt);
     }
-    public verify(req:RequestCustom,res:Response,next:NextFunction){
-        const authHeader = req.headers["authorization"];
-        if (!authHeader) {return res.sendStatus(401)};
-        const token = authHeader?.split(" ")[1];
-        if(token){
-            jwt.verify(token, process.env.SECRET_KEY as string, (err:any, data:any) => {
-                if (err) res.sendStatus(403);
-                req.idUser = data.id;
-                next();
-            });
-        }else{
-            res.sendStatus(403)
-        }
-    }
     public login = (req:Request,res:Response) => {
         const data = req.body;
         const resultData:AuthReq = {
@@ -88,7 +74,16 @@ export default class Auth {
                 return
             }
             await collectionAuth.insertOne({idUser:data.username,username:data.username,password:pass_hash,role:data.role ? data.role : 2})
-            collectionInfo.insertOne({idUser:data.username,email:data.email,name:"",phone:"",point:0}).then(infoRes => NewResponse.responseMessage(res,201,NewMessage.createItemsMessage('account')))
+            collectionInfo.insertOne({
+                idUser:data.username,
+                email:data.email,
+                name:data.name ? data.name:"",
+                phone:data.phone ? data.phone:"",
+                point:0,
+                dateCreated:new Date().toISOString().split('T')[0],
+                action:"active"
+            })
+            .then(infoRes => NewResponse.responseMessage(res,201,NewMessage.createItemsMessage('account')))
         }
         catch(error){
             NewResponse.responseMessage(res,500,'A server error occurred. Please try again in 5 minutes.')
