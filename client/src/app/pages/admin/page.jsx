@@ -17,8 +17,8 @@ const Admin = () => {
     const {isOpen, onOpen, onOpenChange} = useDisclosure();
     const router = useRouter()
     useEffect(() => {
-        !isLog && !isUser ? router.push('/auth') : ''
-    },[isLog])
+        isLog !== "" && !isLog && !isUser ? router.push('/auth') : ''
+    },[isLog,isUser])
     useEffect(() => {document.title="Management"},[])
     return isLog && <section className="adminLayout w-full h-auto flex flex-wrap justify-center">
     <ListBtn props={{setNameModal,onOpen}}/>
@@ -26,7 +26,7 @@ const Admin = () => {
     {nameModal === "add" && <ModalAddNew props={{isOpen,onOpenChange}}/>}
     {nameModal === "edit" && <ModalEditFilm props={{isOpen,onOpenChange,idEdit,setNameModal}}/>}
     {nameModal === "user" && <ModalViewUser props={{isOpen,onOpenChange}}/>}
-    {nameModal === "addUser" && <ModalAddStaff props={{isOpen,onOpenChange}}/>}
+    {nameModal === "addUser" && <ModalAddStaff props={{isOpen,onOpenChange,setNameModal}}/>}
 </section>
 }
 export default Admin
