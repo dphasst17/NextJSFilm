@@ -1,6 +1,7 @@
 'use client'
 import { fetchCreateFilm } from "@/app/api/apiFilm"
 import { StateContext } from "@/app/context/stateContext"
+import { getToken } from "@/app/utils"
 import { Modal, ModalHeader, ModalContent, ModalFooter, ModalBody, Input, Button, Checkbox,Textarea} from "@nextui-org/react"
 import { use, useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
@@ -8,6 +9,7 @@ const ModalAddNew = ({ props }) => {
   const { timeFrame,setFilm,film } = use(StateContext)
   const [time,setTime] = useState([])
   const { register, handleSubmit, formState: { errors }, } = useForm()
+  const GetToken = getToken()
   const ColFilm = [
     {wFull:false,type:Input,key:'id'},
     {wFull:false,type:Input,key:'title'},
@@ -20,13 +22,13 @@ const ModalAddNew = ({ props }) => {
     {wFull:false,type:Input,key:'thumbnails'},
     {wFull:true,type:Input,key:'trailer'}
 ]
-  const onSubmit = data => {
+  const onSubmit = async data => {
     if(time.length === 0){
       alert('Please select time frame')
       return
     }
-    console.log({...data,frame:time})
-    fetchCreateFilm({...data,title:data.title.toUpperCase(),frame:time}).then(res => 
+    const token = await GetToken()
+    fetchCreateFilm(token,{...data,title:data.title.toUpperCase(),frame:time}).then(res => 
       {
         if(res.status === 201){
           setFilm([{thumbnails:data.thumbnails,title:data.title,id:data.id},...film])
