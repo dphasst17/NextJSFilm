@@ -8,7 +8,7 @@ export const StateProvider = ({children}) => {
     const [errFilm,setErrFilm] = useState(null);
     const [coming,setComing] = useState(null);
     const [errComing,setErrComing] = useState(null);
-    const [isLog,setIsLog] = useState()
+    const [isLog,setIsLog] = useState("")
     const [timeFrame,setTimeFrame] = useState([7,9,11,13,15,17,19,21,23])
     const arrKeyFilmDetail = ['director','cast','release','time']
     const [isLoading,setIsLoading] = useState(false)
