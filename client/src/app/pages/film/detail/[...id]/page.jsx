@@ -21,6 +21,7 @@ const Detail = () => {
     const [seat,setSeat] = useState('')
     const [dateArray, setDateArray] = useState([]);
     const [isPaypal, setIsPaypal] = useState(false);
+    const [price,setPrice] = useState(0)
     const [stateForm, setStateForm] = useState({ info: { name: '', email: '', phone: '' }, timeFrame: 0, date: '', count: 1, idFilm: param?.id[0] })
     const { data: result, err } = useFetchDataByKey('film', 'fetchFilmDetail', param?.id[0])
     useEffect(() => {
@@ -41,6 +42,9 @@ const Detail = () => {
             setDateArray(tempDateArray);
         }
     }, [data])
+    useEffect(() => {
+        setPrice(user?.map(u => u.point).toString() === '20' ? '1' : '3')
+    },[user])
     const onSubmit = data => {
         if (!isLog) {
             return router.push('/auth')
@@ -106,11 +110,11 @@ const Detail = () => {
                         <Input {...register(i, { required: true })} radius="sm" isInvalid={errors[i] ? true : false} type="text"
                             label={i.toUpperCase()} defaultValue={u[i]} className={`${i === 'email' ? 'w-2/5' : 'w-1/5'} mx-1`} />
                     ))}
-                    <Input {...register('count', { required: true })} radius="sm" type="text" label="Ticket count" value={1} className="w-[15%]" />
+                    <Input {...register('count', { required: true })} radius="sm" type="text" label="Ticket price" value={`${price}$`} className="w-[15%]" />
                     {!isPaypal && <div className="w-full flex items-center justify-center my-2">
                         <Button onClick={() => { handleSubmit(onSubmit)() }} color="success" size="lg" className="my-2 w-[180px] text-[20px] font-sc-thin text-white">Payment</Button>
                     </div>}
-                    {isPaypal && <Payment props={{ setIsPaypal, setStateForm, stateForm,seat, count: 1, price: 1, title: d.title, background: d.background, thumbnails: d.thumbnails }} />}
+                    {isPaypal && <Payment props={{ setIsPaypal, setStateForm, stateForm,seat, count: 1, price, title: d.title, background: d.background, thumbnails: d.thumbnails }} />}
                 </div>
             </div>}
         </div>)}

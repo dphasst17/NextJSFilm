@@ -69,15 +69,15 @@ const IndexUser = () => {
                             <Code className='w-[95%] text-center flex justify-center items-center cursor-pointer font-bold text-[20px] bg-zinc-900 bg-opacity-80 truncate'>Ticket id : {t.idTicket}</Code>
                             <Code className='w-[30%] text-center cursor-pointer font-bold text-[20px] bg-zinc-900 bg-opacity-80 truncate'>Time: {t.timeFrame}:00 {t.timeFrame < 12 ? 'AM' : 'PM'}</Code>
                             <Code className='w-2/5 text-center cursor-pointer font-bold text-[20px] bg-zinc-900 bg-opacity-80 truncate'>Date: {t.date}</Code>
-                            <Code className='w-1/4 text-center cursor-pointer font-bold text-[20px] bg-zinc-900 bg-opacity-80 truncate'>Count: {t.count}</Code>
+                            <Code className='w-1/4 text-center cursor-pointer font-bold text-[20px] bg-zinc-900 bg-opacity-80 truncate'>Price: {t.price} $</Code>
                         </div>
                     </div>)}
                 </div>
-                <Pagination
+                {user &&<Pagination
                     className="w-full flex items-center justify-center my-2 animateOpacity transition-all animate-delay-0-3"
                     isCompact size="lg" showControls total={pagination(3, user?.map(u => u.ticket)[0].length)} initialPage={1}
                     onChange={(e) => { setActivePage(e) }}
-                />
+                />}
             </div>
         </section>
         {modalName === "edit" && <ModalEditUser props={{ isOpen, onOpenChange, setModalName }} />}

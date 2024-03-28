@@ -28,7 +28,6 @@ const Payment = ({ props }) => {
                                     idFilm:props.stateForm.idFilm,
                                     date:props.stateForm.date,
                                     timeFrame:props.stateForm.timeFrame,
-                                    count:1,
                                     background:props.background,
                                     thumbnails:props.thumbnails
                                 },
