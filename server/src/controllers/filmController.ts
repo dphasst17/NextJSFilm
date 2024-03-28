@@ -255,7 +255,8 @@ export default class Films /*  extends AbstractFilm */ {
           return;
         }
         const idUser = result.idUser
-        const updatePoint = {$inc:{point:1}}
+        const price = result.price
+        const updatePoint = price === 3 ? {$inc:{point:1}} : {$set:{point:0}}
         collectionInfo.findOneAndUpdate({idUser:idUser},updatePoint,options)
         .then(iResult => {
           if(!iResult){

@@ -31,7 +31,7 @@ export default class Users {
                 timeFrame: 1,
                 date: 1,
                 idFilm: 1,
-                count: 1,
+                price: 1,
                 dateBuy: 1,
                 title: { $arrayElemAt: ["$filmData.title", 0] },
                 thumbnails: { $arrayElemAt: ["$filmData.thumbnails", 0] },

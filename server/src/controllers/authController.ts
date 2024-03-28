@@ -80,8 +80,8 @@ export default class Auth {
                 name:data.name ? data.name:"",
                 phone:data.phone ? data.phone:"",
                 point:0,
-                dateCreated:new Date().toISOString().split('T')[0],
-                action:"active"
+                action:"active",
+                dateCreated:new Date().toISOString().split('T')[0]
             })
             .then(infoRes => NewResponse.responseMessage(res,201,NewMessage.createItemsMessage('account')))
         }
