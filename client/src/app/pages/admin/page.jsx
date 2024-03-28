@@ -10,10 +10,11 @@ import { StateContext } from "@/app/context/stateContext"
 import ModalEditFilm from "./modal/edit"
 import ModalViewUser from "./modal/viewUserStaff"
 import ModalAddStaff from "./modal/addStaff"
+import Card from "./card/card"
 const Admin = () => {
     const {isLog,isUser} = use(StateContext)
     const [nameModal,setNameModal] = useState("");
-    const [idEdit,setIdEdit] = useState("")
+    const [idEdit,setIdEdit] = useState("");
     const {isOpen, onOpen, onOpenChange} = useDisclosure();
     const router = useRouter()
     useEffect(() => {
@@ -21,6 +22,7 @@ const Admin = () => {
     },[isLog,isUser])
     useEffect(() => {document.title="Management"},[])
     return isLog && <section className="adminLayout w-full h-auto flex flex-wrap justify-center">
+    <Card />
     <ListBtn props={{setNameModal,onOpen}}/>
     <AdminFilm props={{setNameModal,onOpen,setIdEdit}}/>
     {nameModal === "add" && <ModalAddNew props={{isOpen,onOpenChange}}/>}

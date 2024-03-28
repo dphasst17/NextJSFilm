@@ -1,11 +1,15 @@
 import { use, useEffect, useState } from "react";
 import * as ApiFilm from "../api/apiFilm"
+import * as ApiStatistical from "../api/apiStatistical"
 import { StateContext } from "../context/stateContext";
 const handleGetApi = (type,fName,key) => {
     let url;
     switch(type){
         case 'film':
             url = key ? ApiFilm[fName](key) : ApiFilm[fName]
+            break;
+        case 'statistical':
+            url = key ? ApiStatistical[fName](key) : ApiStatistical[fName]
             break;
         default:
             break;
