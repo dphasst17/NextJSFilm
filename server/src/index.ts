@@ -4,6 +4,7 @@ import * as db from "./models/connect"
 import FilmRouter from "./routes/filmRouter"
 import AuthRouter from "./routes/authRouter"
 import UserRouter from "./routes/userRouter"
+import StatisticalRouter from "./routes/statisticalRouter"
 import { createServer } from "http";
 import { Server } from "socket.io";
 dotenv.config();
@@ -35,7 +36,8 @@ app.get('/', (req, res) => {
 const arrRoute = [
   {path:'film',isApi:true,routes:FilmRouter(io)},
   {path:'auth',isApi:false,routes:AuthRouter},
-  {path:'user',isApi:false,routes:UserRouter}
+  {path:'user',isApi:false,routes:UserRouter},
+  {path:'statistical',isApi:false,routes:StatisticalRouter}
 ]
 arrRoute.map(r => app.use((r.isApi === true ? `/api/${r.path}`: `/${r.path}`),r.routes))
 server.listen(PORT, () => {

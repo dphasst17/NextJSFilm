@@ -1,11 +1,10 @@
 import express from "express";
-import FilmController from "../controllers/filmController";
-import Auth from "../controllers/authController";
 import { Server } from "socket.io";
 import MiddleWare from "../middleware/middleware";
+import Films from "../controllers/filmController";
 const router = express.Router();
 export default (io: Server) => {
-  const FilmControllers = new FilmController(io);
+  const FilmControllers = new Films(io);
   const Middle = new MiddleWare()
   router.get("/", FilmControllers.getAllFilm);
   router.get("/detail/:id", FilmControllers.getFilmDetail);

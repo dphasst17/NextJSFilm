@@ -1,9 +1,8 @@
 import express from "express";
-import Auth from "../controllers/authController";
-import User from "../controllers/userController"
+import Users from "../controllers/userController"
 import MiddleWare from "../middleware/middleware";
 const router = express.Router();
-const UserController = new User()
+const UserController = new Users()
 const Middle = new MiddleWare()
 router.post('/',Middle.verify as any,UserController.getUser as any)
 router.post('/update',Middle.verify as any,UserController.updateUser as any)

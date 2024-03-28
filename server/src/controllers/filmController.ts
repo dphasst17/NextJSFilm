@@ -1,4 +1,4 @@
-import { collectionFilm, collectionTicket } from "./../models/collection";
+import { collectionFilm, collectionInfo, collectionTicket } from "./../models/collection";
 import { Request, Response } from "express";
 import * as NewResponse from "../utils/response";
 import * as NewMessage from "../utils/message";
@@ -42,8 +42,9 @@ interface TicketDetail {
   idUser: string;
   dateBuy: string;
   seat: string;
+  price:number
 }
-export default class FilmController /*  extends AbstractFilm */ {
+export default class Films /*  extends AbstractFilm */ {
   private io: Server;
 
   constructor(io: Server) {
@@ -196,6 +197,7 @@ export default class FilmController /*  extends AbstractFilm */ {
       idUser: idUser,
       dateBuy: new Date().toLocaleDateString(),
       seat: data.seat,
+      price:data.price
     };
     collectionTicket
       .insertOne(getData)
@@ -252,7 +254,16 @@ export default class FilmController /*  extends AbstractFilm */ {
           NewResponse.responseMessage(res, 401,"There was an error during execution, please try again later.");
           return;
         }
-        NewResponse.responseMessage(res, 200, "Confirm ticket is success");
+        const idUser = result.idUser
+        const updatePoint = {$inc:{point:1}}
+        collectionInfo.findOneAndUpdate({idUser:idUser},updatePoint,options)
+        .then(iResult => {
+          if(!iResult){
+            NewResponse.responseMessage(res, 401,"There was an error during execution, please try again later.");
+            return;
+          }
+          NewResponse.responseMessage(res, 200, "Confirm ticket is success");
+        })
       })
       .catch((err) =>
         NewResponse.responseMessage(res,500,"A server error occurred. Please try again in 5 minutes.")
