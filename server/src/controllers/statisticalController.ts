@@ -7,8 +7,25 @@ export default class Statistical {
   private currentMonth = this.getMonth + 1 === 12 ? 1 : this.getMonth + 1;
   public user = (req: Request, res: Response) => {
     collectionInfo
-      .find()
-      .project({ _id: 0, idUser: 1, dateCreated: 1, action: 1 })
+      .aggregate([
+        {
+          $lookup: {
+            from: "auth",
+            localField: "idUser",
+            foreignField: "idUser",
+            as: "dataAuth",
+          },
+        },
+        {
+          $project: {
+            _id: 0,
+            idUser: 1,
+            action: 1,
+            dateCreated: 1,
+            role: { $arrayElemAt: ["$dataAuth.role", 0] },
+          },
+        },
+      ])
       .sort({ dateCreated: -1 })
       .toArray()
       .then((result) => {
@@ -21,6 +38,7 @@ export default class Statistical {
           total: totalUser,
           new: newUser,
           active: activeUser,
+          dataUser: result,
         });
       })
       .catch((err) =>
@@ -41,14 +59,22 @@ export default class Statistical {
         const revenue: number = Number(
           result.map((p) => p.price).reduce((a, b) => a + b)
         );
-        const revenueCurrentMonth = result.filter(f => Number(f.dateBuy.split("/")[1]) === this.currentMonth).map(t=>t.price).reduce((a,b) => a+b)
-        const getDataLastMonth = result.filter(f => Number(f.dateBuy.split("/")[1]) === this.currentMonth - 1);
-        const revenueLastMonth = getDataLastMonth.length !== 0 ? getDataLastMonth.map(t=>t.price).reduce((a,b) => a+b) :0
+        const revenueCurrentMonth = result
+          .filter((f) => Number(f.dateBuy.split("/")[1]) === this.currentMonth)
+          .map((t) => t.price)
+          .reduce((a, b) => a + b);
+        const getDataLastMonth = result.filter(
+          (f) => Number(f.dateBuy.split("/")[1]) === this.currentMonth - 1
+        );
+        const revenueLastMonth =
+          getDataLastMonth.length !== 0
+            ? getDataLastMonth.map((t) => t.price).reduce((a, b) => a + b)
+            : 0;
         NewResponse.responseData(res, 200, {
           ticketSold: ticketSold,
           totalRevenue: revenue,
-          rcm:revenueCurrentMonth,
-          rlm:revenueLastMonth
+          rcm: revenueCurrentMonth,
+          rlm: revenueLastMonth,
         });
       })
       .catch((err) =>
