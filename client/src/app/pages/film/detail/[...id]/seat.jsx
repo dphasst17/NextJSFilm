@@ -14,8 +14,7 @@ const Seat = ({ props }) => {
   }, [data])
   useEffect(() => {
     // Kết nối đến server
-    const socket = io(`${process.env.NEXT_PUBLIC_URL}/auth/token`);
-
+    const socket = io(`${process.env.NEXT_PUBLIC_URL}`);
     // Lắng nghe sự kiện 'seat-changed'
     socket.on('seat-changed', (newTicket) => {
       if (props.day === newTicket.date && props.time === newTicket.time) {
