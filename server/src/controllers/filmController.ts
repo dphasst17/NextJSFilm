@@ -197,7 +197,7 @@ export default class Films /*  extends AbstractFilm */ {
       idUser: idUser,
       dateBuy: new Date().toLocaleDateString(),
       seat: data.seat,
-      price:data.price
+      price:data.price ? data.price : 3
     };
     collectionTicket
       .insertOne(getData)

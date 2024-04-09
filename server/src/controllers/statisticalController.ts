@@ -59,10 +59,13 @@ export default class Statistical {
         const revenue: number = Number(
           result.map((p) => p.price).reduce((a, b) => a + b)
         );
-        const revenueCurrentMonth = result
-          .filter((f) => Number(f.dateBuy.split("/")[1]) === this.currentMonth)
-          .map((t) => t.price)
-          .reduce((a, b) => a + b);
+        const getDataCurrentMonth = result.filter(
+          (f) => Number(f.dateBuy.split("/")[1]) === this.currentMonth
+        );
+        const revenueCurrentMonth =
+          getDataCurrentMonth.length !== 0
+            ? getDataCurrentMonth.map((t) => t.price).reduce((a, b) => a + b)
+            : 0;
         const getDataLastMonth = result.filter(
           (f) => Number(f.dateBuy.split("/")[1]) === this.currentMonth - 1
         );
@@ -77,13 +80,14 @@ export default class Statistical {
           rlm: revenueLastMonth,
         });
       })
-      .catch((err) =>
+      .catch((err) => {
+        console.log(err);
         NewResponse.responseMessage(
           res,
           500,
           "A server error occurred. Please try again in 5 minutes."
-        )
-      );
+        );
+      });
   };
   public popular = (req: Request, res: Response) => {
     collectionTicket
