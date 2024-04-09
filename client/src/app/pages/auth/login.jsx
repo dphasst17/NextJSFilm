@@ -46,6 +46,7 @@ const LoginForm = ({ props }) => {
         })
     }
     return <>
+        <p className=" font-sans text-zinc-500">user account test: dfast17, pass:dfast17</p>
         <form className="w-full flex flex-col items-center">
             <Input
                 type="text"
@@ -54,6 +55,7 @@ const LoginForm = ({ props }) => {
                 placeholder="Enter your username"
                 className="max-w-sm my-1 animateOpacity transition-all"
                 {...register('username', { required: true })}
+                defaultValue="admin"
                 isInvalid={errors.username ? true : false}
                 errorMessage={errors.username ? "Please enter your username" : ''}
             />
@@ -62,6 +64,7 @@ const LoginForm = ({ props }) => {
                 variant="bordered"
                 {...register('password', { required: true })}
                 placeholder="Enter your password"
+                defaultValue="thisispasswordforadmin"
                 endContent={
                     <button className="focus:outline-none" type="button" onClick={toggleVisibility}>
                         {isVisible ? (
