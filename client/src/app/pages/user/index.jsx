@@ -34,7 +34,6 @@ const IndexUser = () => {
     useEffect(() => {
         isLog !== "" && !isLog && router.push('/auth')
     }, [])
-    useEffect(() => {user !== null && console.log(user)},[user])
     return isLog && <div className='user w-full h-auto min-h-screen flex flex-wrap justify-around content-start'>
         <div className='point w-full h-[30px] my-4 px-2 flex items-center'>
             POINT:
