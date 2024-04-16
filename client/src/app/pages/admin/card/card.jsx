@@ -31,7 +31,7 @@ const Card = () => {
       </div>
     </Code>
     <div className="w-full 2xl:w-[70%] h-auto flex flex-wrap items-center justify-around">
-      <CardDetail props={{icon:FcConferenceCall,value:manager?.user.total,title:'TOTAL USER'}}/>
+      <CardDetail props={{icon:FcConferenceCall,value:manager?.user?.total,title:'TOTAL USER'}}/>
       <CardDetail props={{icon:FcPlus,value:manager?.user.new,title:'NEW USER'}}/>
       <CardDetail props={{icon:FcFilm ,value:manager?.ticket?.ticketSold,title:'TICKET SOLD'}}/>
       <CardDetail props={{icon:FcBullish ,value:`${manager?.ticket ? manager?.ticket.totalRevenue : 0} $`,title:'REVENUE'}}/>
