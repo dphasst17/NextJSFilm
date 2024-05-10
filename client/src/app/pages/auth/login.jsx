@@ -36,7 +36,6 @@ const LoginForm = ({ props }) => {
                     getUser(res.data.accessToken)
                     .then(resData => {
                         if(resData.status === 200){
-                            console.log(resData.data)
                             setUser(resData.data)
                         }
                     })
